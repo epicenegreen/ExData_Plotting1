@@ -46,6 +46,8 @@ powerData <- read.table("./data/household_power_consumption.txt", sep=";", heade
 # create new data frame of just the two days of interest, returns 2880 rows of 9 variables
 DFdays <- powerData[(as.Date(powerData$Date, "%e/%m/%Y")) == "2007-02-01" | (as.Date(powerData$Date, "%e/%m/%Y")) == "2007-02-02",]
 
+paste(DFdays$Date, DFdays$Time)
+
 ## Create 2nd png file
 png(file = "plot2.png", width = 480, height = 480)
 with(DFdays, plot(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),

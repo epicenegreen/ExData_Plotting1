@@ -1,5 +1,5 @@
-##  project_one.R
-##  050415 JAJ
+##  plot4.R
+##  050915 JAJ
 ##  https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip
 ##  The dataset has 2,075,259 rows and 9 columns. First calculate a rough estimate of how much memory the dataset will require in memory before reading into R. Make sure your computer has enough memory (most modern computers should be fine).
 ##  We will only be using data from the dates 2007-02-01 and 2007-02-02. One alternative is to read the data from just those dates rather than reading in the entire dataset and subsetting to those dates.
@@ -46,11 +46,45 @@ powerData <- read.table("./data/household_power_consumption.txt", sep=";", heade
 # create new data frame of just the two days of interest, returns 2880 rows of 9 variables
 DFdays <- powerData[(as.Date(powerData$Date, "%e/%m/%Y")) == "2007-02-01" | (as.Date(powerData$Date, "%e/%m/%Y")) == "2007-02-02",]
 
-## Create png file 
-png(file = "plot1.png", width = 480, height = 480)
-with(DFdays, hist(DFdays$Global_active_power, freq = TRUE, col = "red", main= "Global Active Power",
-     xlab = "Global Active Power (kilowatts", ylab = "Frequency", axes = TRUE, plot= TRUE,
-     labels = FALSE))
+## Create 4th png file
+# To create a 4 plot panel
+#par(mar = c(5.1, 4.1, 2.1, 2.1))
+png(file = "plot4.png")
+#, width = 480, height = 480)
+
+with(DFdays, {
+    par(mfrow = c(2, 2))
+    par(mar = c(5.1, 4.1, 4.1, 2.1))
+plot(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+     DFdays$Global_active_power, xlab = "",
+     ylab = "Global Active Power", col = "black",
+     main= "", axes = TRUE, type="l")
+plot(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+         DFdays$Voltage, xlab = "datetime",
+         ylab = "Voltage", col = "black",
+         main= "", type="l")
+plot(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+                  DFdays$Sub_metering_1, xlab = "",
+                  ylab = "Energy sub metering", col = "black",
+                  main= "", type="n")
+    lines(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+     DFdays$Sub_metering_1, xlab = "",
+     ylab = "Energy sub metering", col = "black",
+     main = "", type="l")
+    lines(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+     DFdays$Sub_metering_2, xlab = "",
+     ylab = "Energy sub metering", col = "red",
+     main= "", type="l")
+    lines(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+     DFdays$Sub_metering_3, xlab = "",
+     ylab = "Energy sub metering", col = "blue",
+     main= "", type="l")
+    legend("topright", legend = c(names(DFdays)[7:9]), lty=1, col = c("black", "red", "blue"), bty="n", cex=.90, xjust = 1)
+
+plot(strptime((paste(DFdays$Date, DFdays$Time)), format="%d/%m/%Y %H:%M:%S"),
+         DFdays$Global_reactive_power, xlab = "datetime",
+         ylab = "Global_reactive_power", col = "black",
+         main= "", type="l")
+})
+    
 dev.off()
-
-
